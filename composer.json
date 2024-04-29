@@ -6,6 +6,9 @@
         }
     },
     "require": {
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+      "ext-pdo": "*",
+        "graceas/php-ics-reader": "^1.1",
+        "illuminate/collections": "^11.5"
     }
 }
