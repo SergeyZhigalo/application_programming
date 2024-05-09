@@ -58,3 +58,10 @@ function getAllUniversities(): array|bool
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getAllGroups(): array|bool
+{
+    $stmt = pdo()->query("SELECT * FROM class_groups");
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

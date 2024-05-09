@@ -16,5 +16,5 @@ require_once __DIR__ . '/boot.php';
             <option value="<?=$university['id']?>"><?=$university['university_name']?></option>
         <?php }?>
     </select>
-    <input type="submit" value="Upload">
+    <input type="submit" value="Импорт">
 </form>
