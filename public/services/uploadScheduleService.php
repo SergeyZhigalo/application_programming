@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 
 $target_dir = "../schedule/";
 $target_file = $target_dir . basename($_FILES["file"]["name"][0]);
-$uploadOk = 1;
 $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 $universityId = Arr::get($_POST, 'university');
 
@@ -30,40 +29,37 @@ if ($fileType !== "ics") {
     die;
 }
 
-if ($uploadOk == 0) {
-    flash('Извините, ваш файл не был импортирован');
-} else {
-    if (move_uploaded_file($_FILES["file"]["tmp_name"][0], $target_file)) {
-        $file = file_get_contents($target_file);
+if (move_uploaded_file($_FILES["file"]["tmp_name"][0], $target_file)) {
+    $file = file_get_contents($target_file);
 
-        $reader = new IcsReader();
-        $ics = $reader->parse($file);
+    $reader = new IcsReader();
+    $ics = $reader->parse($file);
 
-        $scheduleDTOs = [];
-        foreach ($ics->getEvents() as $event) {
-            $class = new ScheduleDTO($event);
+    $scheduleDTOs = [];
+    foreach ($ics->getEvents() as $event) {
+        $class = new ScheduleDTO($event);
 
-            $group = getGroupByNameBy($class->getGroupName());
-            if (!$group) {
-                $group = createGroup($class->getGroupName());
-            }
-
-            if (getClassByUID($class->getUid())) {
-                continue;
-            }
-
-            createClass($class->toArray(
-                groupId: $group['id'],
-                teacherId: $_SESSION['user']['id'],
-                universityId: $universityId,
-            ));
+        $group = getGroupByNameBy($class->getGroupName());
+        if (!$group) {
+            $group = createGroup($class->getGroupName());
         }
 
-        flash("Файл " . basename( $_FILES["file"]["name"][0]) . " был импортирован");
-    } else {
-        flash('Извините, произошла ошибка при импорте вашего файла');
+        if (getClassByUID($class->getUid())) {
+            continue;
+        }
+
+        createClass($class->toArray(
+            groupId: $group['id'],
+            teacherId: $_SESSION['user']['id'],
+            universityId: $universityId,
+        ));
     }
+
+    flash("Файл " . basename( $_FILES["file"]["name"][0]) . " был импортирован");
+} else {
+    flash('Извините, произошла ошибка при импорте вашего файла');
 }
+
 header('Location: /uploadSchedule.php');
 die;
 
@@ -91,7 +87,7 @@ function getClassByUID(string $uid): array|bool
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function createClass(array $dto)
+function createClass(array $dto): array|bool
 {
     $stmt = pdo()->prepare("INSERT INTO classes (class_start, class_end, place, university_id, group_id, teacher_id, subject, uid) VALUES (:class_start, :class_end, :place, :university_id, :group_id, :teacher_id, :subject, :uid)");
     $stmt->execute([
