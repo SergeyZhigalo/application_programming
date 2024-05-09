@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class ScheduleDTO
 {
     private ?string $description;
@@ -21,5 +23,29 @@ class ScheduleDTO
         array_key_exists('SEQUENCE', $data) ? $this->sequence = $data['SEQUENCE'] : $this->sequence = null;
         array_key_exists('SUMMARY', $data) ? $this->summary = $data['SUMMARY'] : $this->summary = null;
         array_key_exists('UID', $data) ? $this->uid = $data['UID'] : $this->uid = null;
+    }
+
+    public function getGroupName(): string
+    {
+        return explode(' - ', $this->summary)[0];
+    }
+
+    public function getUid(): string
+    {
+        return $this->uid;
+    }
+
+    public function toArray(string $groupId, string $teacherId, string $universityId): array
+    {
+        return [
+            'class_start' => Carbon::parse($this->DTEnd)->format('Y-m-d H:i:s.u'),
+            'class_end' => Carbon::parse($this->DTEnd)->format('Y-m-d H:i:s.u'),
+            'place' => $this->location,
+            'university_id' => $universityId,
+            'group_id' => $groupId,
+            'teacher_id' => $teacherId,
+            'subject' => explode(' - ', $this->summary)[1],
+            'uid' => $this->uid,
+        ];
     }
 }

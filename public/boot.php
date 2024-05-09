@@ -51,3 +51,10 @@ function check_auth(): bool
     echo '</pre>';
     die;
 }
+
+function getAllUniversities(): array|bool
+{
+    $stmt = pdo()->query("SELECT * FROM universities");
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

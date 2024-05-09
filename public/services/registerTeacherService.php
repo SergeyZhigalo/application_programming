@@ -1,24 +1,24 @@
 <?php
 
-require_once __DIR__ . '/boot.php';
+require_once __DIR__ . '/../boot.php';
 
-$stmt = pdo()->prepare("SELECT * FROM teachers WHERE name = :name OR email = :email");
+$stmt = pdo()->prepare("SELECT * FROM teachers WHERE full_name = :full_name OR email = :email");
 $stmt->execute([
-    'name' => $_POST['username'],
+    'full_name' => $_POST['full_name'],
     'email' => $_POST['email'],
 ]);
 if ($stmt->rowCount() > 0) {
-    flash('Это имя пользователя или email уже занято.');
-    header('Location: /');
+    flash('Это ФИО или email уже занято.');
+    header('Location: /registerTeacher.php');
     die;
 }
 
-$stmt = pdo()->prepare("INSERT INTO teachers (name, email, password) VALUES (:name, :email, :password)");
+$stmt = pdo()->prepare("INSERT INTO teachers (full_name, email, password) VALUES (:full_name, :email, :password)");
 
 $stmt->execute([
-    'name' => $_POST['username'],
+    'full_name' => $_POST['full_name'],
     'email' => $_POST['email'],
     'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
 ]);
 
-header('Location: loginTeacher.php');
+header('Location: /loginTeacher.php');
