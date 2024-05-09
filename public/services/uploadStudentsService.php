@@ -43,16 +43,7 @@ if (move_uploaded_file($_FILES["file"]["tmp_name"][0], $target_file)) {
         }
 
         createStudent($student->toArray($groupId));
-//        dd($student->toArray($groupId));
     }
-//dd($file);
-//
-//        createClass($class->toArray(
-//            groupId: $group['id'],
-//            teacherId: $_SESSION['user']['id'],
-//            universityId: $universityId,
-//        ));
-//    }
 
     flash("Файл " . basename( $_FILES["file"]["name"][0]) . " был импортирован");
 } else {

@@ -25,7 +25,7 @@ class StudentDTO
             'email' => $this->email,
             'group_id' => $groupId,
             'group_head' => 0,
-            'password' => password_hash(explode(' - ', $this->email)[0], PASSWORD_DEFAULT),
+            'password' => password_hash(explode('@', $this->email)[0], PASSWORD_DEFAULT),
         ];
     }
 }

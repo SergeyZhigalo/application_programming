@@ -42,6 +42,16 @@ function check_auth(): bool
     return !!($_SESSION['user']['id'] ?? false);
 }
 
+function check_is_student(): bool
+{
+    return $_SESSION['user']['role'] === 'student';
+}
+
+function check_is_teacher(): bool
+{
+    return $_SESSION['user']['role'] === 'teacher';
+}
+
 #[NoReturn] function dd(...$args): void
 {
     echo '<pre>';
