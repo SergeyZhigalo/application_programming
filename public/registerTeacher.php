@@ -13,8 +13,8 @@
 
 <form method="post" action="services/registerTeacherService.php">
     <div class="mb-3">
-        <label for="name" class="form-label">ФИО</label>
-        <input type="text" class="form-control" id="name" name="name" required>
+        <label for="full_name" class="form-label">ФИО</label>
+        <input type="text" class="form-control" id="full_name" name="full_name" required>
     </div>
     <div class="mb-3">
         <label for="email" class="form-label">Почта</label>
