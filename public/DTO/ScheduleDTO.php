@@ -38,7 +38,7 @@ class ScheduleDTO
     public function toArray(string $groupId, string $teacherId, string $universityId): array
     {
         return [
-            'class_start' => Carbon::parse($this->DTEnd)->format('Y-m-d H:i:s.u'),
+            'class_start' => Carbon::parse($this->DTStart)->format('Y-m-d H:i:s.u'),
             'class_end' => Carbon::parse($this->DTEnd)->format('Y-m-d H:i:s.u'),
             'place' => $this->location,
             'university_id' => $universityId,

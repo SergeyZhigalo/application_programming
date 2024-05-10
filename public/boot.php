@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/repository.php';
 
 use JetBrains\PhpStorm\NoReturn;
 use Dotenv\Dotenv;
@@ -60,18 +61,4 @@ function check_is_teacher(): bool
     }
     echo '</pre>';
     die;
-}
-
-function getAllUniversities(): array|bool
-{
-    $stmt = pdo()->query("SELECT * FROM universities");
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function getAllGroups(): array|bool
-{
-    $stmt = pdo()->query("SELECT * FROM class_groups");
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
