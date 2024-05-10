@@ -8,3 +8,4 @@ logs
 /.scribe
 public/schedule
 public/students
+public/export

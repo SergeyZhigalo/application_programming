@@ -7,10 +7,11 @@ require_once __DIR__ . '/boot.php';
 
 $class = getClassById($_GET['id']);
 $students = getStudentsByGroupId($class['group_id']);
-$classes = getClassesByUniversityIdGroupIdTeacherId(
+$classes = getClassesByUniversityIdGroupIdTeacherIdSubject(
     universityId: $class['university_id'],
     groupId: $class['group_id'],
     teacherId: $_SESSION['user']['id'],
+    subject: $class['subject'],
 );
 $classesCollection = new Collection($classes);
 $classAttendance = new Collection(getClassAttendanceByClassIds($classesCollection->pluck('id')->all()));
@@ -19,7 +20,6 @@ $classAttendance = new Collection(getClassAttendanceByClassIds($classesCollectio
 <style>
     table {
         border-collapse: collapse;
-        width: 100%;
         border: 2px solid #333;
         font-family: Arial, sans-serif;
     }
@@ -39,19 +39,6 @@ $classAttendance = new Collection(getClassAttendanceByClassIds($classesCollectio
     }
     tr:hover {
         background-color: #ddd;
-    }
-    a.button {
-        display: inline-block;
-        padding: 5px 10px;
-        text-decoration: none;
-        background-color: #4CAF50;
-        color: white;
-        border: 1px solid #4CAF50;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-    a.button:hover {
-        background-color: #45a049;
     }
 </style>
 

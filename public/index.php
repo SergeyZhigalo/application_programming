@@ -9,6 +9,7 @@
                 <li><a href="uploadSchedule.php">Импорт расписания</a></li>
                 <li><a href="uploadStudents.php">Импорт студентов</a></li>
                 <li><a href="classes.php">Предметы</a></li>
+                <li><a href="export.php">Экспорт</a></li>
             </ul>
         </nav>
     <?php }?>

@@ -51,13 +51,19 @@ function getStudentsByGroupId(string $id): array|false
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getClassesByUniversityIdGroupIdTeacherId(string $universityId, string $groupId, string $teacherId): array|false
+function getClassesByUniversityIdGroupIdTeacherIdSubject(string $universityId, string $groupId, string $teacherId, string $subject): array|false
 {
-    $stmt = pdo()->prepare("SELECT * FROM classes WHERE university_id = :university_id AND group_id = :group_id AND teacher_id = :teacher_id ORDER BY class_start;");
+    $stmt = pdo()->prepare("
+        SELECT *
+        FROM classes
+        WHERE university_id = :university_id AND group_id = :group_id AND teacher_id = :teacher_id AND subject = :subject
+        ORDER BY class_start;
+    ");
     $stmt->execute([
         'university_id' => $universityId,
         'group_id' => $groupId,
         'teacher_id' => $teacherId,
+        'subject' => $subject,
     ]);
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -66,8 +72,16 @@ function getClassesByUniversityIdGroupIdTeacherId(string $universityId, string $
 function getClassAttendanceByClassIds(array $ids): array|false
 {
     $classIds = implode(',', $ids);
-    $stmt = pdo()->prepare("SELECT * FROM class_attendance WHERE class_id IN ($classIds)");
+    $stmt = pdo()->prepare("SELECT * FROM class_attendance WHERE class_id IN ($classIds);");
     $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllClassesByTeacherId(string $id): array|false
+{
+    $stmt = pdo()->prepare("SELECT * FROM classes WHERE teacher_id = :teacher_id;");
+    $stmt->execute(['teacher_id' => $id]);
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
