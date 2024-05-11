@@ -85,3 +85,43 @@ function getAllClassesByTeacherId(string $id): array|false
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getStudentById(string $id): array|false
+{
+    $stmt = pdo()->prepare("SELECT * FROM students WHERE id = :id;");
+    $stmt->execute(['id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getRecognizingStudentsByGroupHeadByClassId(string $id): array|false
+{
+    $stmt = pdo()->prepare("SELECT * FROM class_attendance_group_head WHERE class_id = :class_id");
+    $stmt->execute(['class_id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getRecognizingStudentsByStudentsByClassId(string $id): array|false
+{
+    $stmt = pdo()->prepare("SELECT * FROM class_attendance_students WHERE class_id = :class_id");
+    $stmt->execute(['class_id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getRecognizingStudentsByGroupHeadForStudent(string $studentId)
+{
+    $stmt = pdo()->prepare("SELECT * FROM class_attendance_group_head WHERE student_id = :student_id ORDER BY id DESC LIMIT 1");
+    $stmt->execute(['student_id' => $studentId]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getRecognizingStudentsByStudentsForStudent(string $groupId)
+{
+    $stmt = pdo()->prepare("SELECT * FROM class_attendance_students WHERE group_id = :group_id ORDER BY time_end DESC LIMIT 1");
+    $stmt->execute(['group_id' => $groupId]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}

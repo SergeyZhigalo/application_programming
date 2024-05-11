@@ -1,5 +1,17 @@
 <?php
-    require_once __DIR__ . '/boot.php';
+
+use Illuminate\Support\Arr;
+
+require_once __DIR__ . '/boot.php';
+
+$recognizingStudents = null;
+$recognizingGroupHead = null;
+if (check_is_student()) {
+    $recognizingGroupHead = getRecognizingStudentsByGroupHeadForStudent($_SESSION['user']['id']);
+    $recognizingStudents = getRecognizingStudentsByStudentsForStudent($_SESSION['user']['group_id']);
+    $recognizingGroupHeadClass = getClassById($recognizingGroupHead['class_id']);
+    $recognizingStudentsClass = getClassById($recognizingStudents['class_id']);
+}
 ?>
 
 <?php if (check_auth()) { ?>
@@ -15,7 +27,31 @@
     <?php }?>
 
     <h1>Добро пожаловать, <?=htmlspecialchars($_SESSION['user']['full_name'])?>!</h1>
+    <?php if (Arr::get($_SESSION, 'user.group_head')) { ?>
+        <h2>Вы староста</h2>
+    <?php }?>
+
     <span>Вы зарегистрированы как <?=check_is_student() ? 'Студент' : 'Преподаватель'?></span>
+
+    <?php if ($recognizingGroupHead && checkTimeRange($recognizingGroupHeadClass['class_start'], $recognizingGroupHeadClass['class_end'])) { ?>
+        <h2>Проверка старостой</h2>
+        <div>
+            <a class="button" href="recognizingStudents.php?id=<?=$recognizingGroupHead['class_id']?>&isGroupHead=1">Отметить</a>
+        </div>
+    <?php }?>
+    <?php if ($recognizingStudents && checkTimeRange($recognizingStudentsClass['class_start'], $recognizingStudents['time_end'])) { ?>
+        <div>
+            <h2>Самопроверка</h2>
+            <?php flash(); ?>
+            <form action="services/recognizingStudentsCheckService.php" method="post" enctype="multipart/form-data">
+                <label for="code">Введите код</label>
+                <input type="text" name="code" id="code" required>
+                <input type="text" value="<?=$recognizingStudents['class_id']?>" name="class" id="class" style="display: none">
+
+                <input type="submit" value="Отметиться">
+            </form>
+        </div>
+    <?php }?>
 
     <form class="mt-5" method="post" action="logout.php">
         <button type="submit" class="btn btn-primary">Выйти</button>

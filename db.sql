@@ -48,3 +48,22 @@ CREATE TABLE IF NOT EXISTS class_attendance(
     FOREIGN KEY (class_id) REFERENCES classes(id),
     FOREIGN KEY (student_id) REFERENCES students(id)
 );
+
+CREATE TABLE IF NOT EXISTS class_attendance_group_head(
+   id SERIAL PRIMARY KEY,
+   student_id int NOT NULL,
+   class_id int NOT NULL,
+   FOREIGN KEY (student_id) REFERENCES students(id),
+   FOREIGN KEY (class_id) REFERENCES classes(id)
+);
+
+CREATE TABLE IF NOT EXISTS class_attendance_students(
+    id SERIAL PRIMARY KEY,
+    group_id int NOT NULL,
+    class_id int NOT NULL,
+    count int NOT NULL,
+    time_end timestamp NOT NULL,
+    hash TEXT NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES class_groups(id),
+    FOREIGN KEY (class_id) REFERENCES classes(id)
+);

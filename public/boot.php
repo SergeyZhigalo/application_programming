@@ -3,6 +3,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/repository.php';
 
+use Carbon\Carbon;
 use JetBrains\PhpStorm\NoReturn;
 use Dotenv\Dotenv;
 
@@ -61,4 +62,18 @@ function check_is_teacher(): bool
     }
     echo '</pre>';
     die;
+}
+
+function generateUniqueHash(): string
+{
+    return substr(uniqid(), -6);
+}
+
+function checkTimeRange(string $startTime, string $endTime): bool
+{
+    $now = Carbon::now();
+    $start = Carbon::parse($startTime)->format('Y-m-d H:i:s.u');
+    $end = Carbon::parse($endTime)->format('Y-m-d H:i:s.u');
+
+    return $now->between($start, $end);
 }
