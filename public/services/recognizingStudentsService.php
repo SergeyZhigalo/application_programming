@@ -17,7 +17,11 @@ foreach ($_POST['status'] as $studentId => $value) {
     }
 }
 
-header('Location: /classes.php');
+if (check_is_teacher()) {
+    header('Location: /classes.php');
+} else {
+    header('Location: /');
+}
 die;
 
 function clearClassAttendanceByClassIds(array $ids): void

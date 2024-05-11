@@ -25,6 +25,7 @@ if (password_verify($_POST['password'], $user['password'])) {
         'full_name' => $user['full_name'],
         'email' => $user['email'],
         'role' => 'student',
+        'group_head' => 'group_head',
         'group_id' => $user['group_id'],
     ];
     header('Location: /');
