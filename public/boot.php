@@ -4,6 +4,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/repository.php';
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use JetBrains\PhpStorm\NoReturn;
 use Dotenv\Dotenv;
 
@@ -46,7 +47,7 @@ function check_auth(): bool
 
 function check_is_student(): bool
 {
-    return $_SESSION['user']['role'] === 'student';
+    return Arr::get($_SESSION, 'user.role') === 'student';
 }
 
 function check_is_teacher(): bool
@@ -76,4 +77,14 @@ function checkTimeRange(string $startTime, string $endTime): bool
     $end = Carbon::parse($endTime)->format('Y-m-d H:i:s.u');
 
     return $now->between($start, $end);
+}
+
+function parseStatus(int|float $status): string
+{
+    return match ($status) {
+        0.0 => 'Не был',
+        0.5 => 'Опоздал',
+        1.0 => 'Был',
+        default => 'Ошибка'
+    };
 }

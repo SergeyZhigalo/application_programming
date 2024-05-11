@@ -125,3 +125,18 @@ function getRecognizingStudentsByStudentsForStudent(string $groupId)
 
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+function getClassAttendanceForStudent(string $studentId): array|false
+{
+    $stmt = pdo()->prepare("
+        SELECT class_attendance.*, classes.subject, classes.class_start
+        FROM class_attendance
+        JOIN classes ON class_attendance.class_id = classes.id
+        WHERE student_id = :student_id
+        ORDER BY classes.subject, classes.class_start;;
+    ");
+
+    $stmt->execute(['student_id' => $studentId]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
