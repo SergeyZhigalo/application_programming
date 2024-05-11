@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
 require_once __DIR__ . '/boot.php';
@@ -13,6 +14,31 @@ if (check_is_student()) {
     $recognizingStudentsClass = getClassById($recognizingStudents['class_id']);
 }
 ?>
+
+<style>
+    table {
+        border-collapse: collapse;
+        border: 2px solid #333;
+        font-family: Arial, sans-serif;
+    }
+    th, td {
+        border: 2px solid #333;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>
 
 <?php if (check_auth()) { ?>
     <?php if (check_is_teacher()) { ?>
@@ -50,6 +76,31 @@ if (check_is_student()) {
 
                 <input type="submit" value="Отметиться">
             </form>
+        </div>
+    <?php }?>
+
+    <?php if (check_is_student()) { ?>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Предмет</th>
+                    <th>Посещение</th>
+                    <th>Дата</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach(getClassAttendanceForStudent($_SESSION['user']['id']) as $class) { ?>
+                    <tr>
+                        <td><?=$class['id']?></td>
+                        <td><?=$class['subject']?></td>
+                        <td><?=parseStatus($class['status'])?></td>
+                        <td><?=Carbon::parse($class['class_start'])->format('Y-m-d')?></td>
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
         </div>
     <?php }?>
 
