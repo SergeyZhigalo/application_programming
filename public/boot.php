@@ -72,7 +72,7 @@ function generateUniqueHash(): string
 
 function checkTimeRange(string $startTime, string $endTime): bool
 {
-    $now = Carbon::now();
+    $now = Carbon::now()->addHours(3);
     $start = Carbon::parse($startTime)->format('Y-m-d H:i:s.u');
     $end = Carbon::parse($endTime)->format('Y-m-d H:i:s.u');
 

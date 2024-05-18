@@ -27,7 +27,7 @@ function createClassAttendanceGroupHead(string $groupId, string $classId, string
         'group_id' => $groupId,
         'class_id' => $classId,
         'count' => $count,
-        'time_end' => Carbon::now()->addMinutes($timeEnd)->format('Y-m-d H:i:s.u'),
+        'time_end' => Carbon::now()->addHours(3)->addMinutes($timeEnd)->format('Y-m-d H:i:s.u'),
         'hash' => generateUniqueHash(),
     ]);
 }
